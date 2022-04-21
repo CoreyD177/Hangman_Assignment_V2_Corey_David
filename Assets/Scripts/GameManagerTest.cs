@@ -15,7 +15,7 @@ public class GameManagerTest : MonoBehaviour
     //Dictionary to store words
     [SerializeField] public static Dictionary<int, string> wordList = new Dictionary<int, string>();
     //Location of WordFile
-    private string path = "Assets/Resources/WordFile.txt";
+    private string path = Path.Combine(Application.streamingAssetsPath, "WordFile.txt");
     #endregion
     void Start()
     {
@@ -38,7 +38,7 @@ public class GameManagerTest : MonoBehaviour
             //Create string array to store word from file using the number before the : as an index
             string[] parts = line.Split(':');
             //Add the key and value from the array to the dictionary
-            wordList.Add(int.Parse(parts[0]), parts[1]);            
+            wordList.Add(int.Parse(parts[0]), parts[1]);
         }
         //Close the reader
         reader.Close();
@@ -58,7 +58,7 @@ public class GameManagerTest : MonoBehaviour
         }
     }*/
     #endregion
-    #region Transitions
+    #region End Game
     public static void EndGame()
     {
         Application.Quit();

@@ -21,6 +21,7 @@ public class HangmanHandlerTest : MonoBehaviour
     //Guess variables
     private readonly int _maximumWrongGuesses = 8;
     private int _correctGuesses, _incorrectGuesses;
+    private List<string> _gameGuesses = new List<string>();
     #endregion
     void Start()
     {
@@ -30,6 +31,8 @@ public class HangmanHandlerTest : MonoBehaviour
     #region Initialize New Game
     void SelectWord()
     {
+        //Reset Game Guesses list so all buttons will display
+        _gameGuesses.Clear();
         //Reset guess counters in case we are starting new game
         _correctGuesses = 0;
         _incorrectGuesses = 0;
@@ -116,27 +119,22 @@ public class HangmanHandlerTest : MonoBehaviour
             {
                 for (int x = 0; x < 13; x++)
                 {
-                    //Position the button based off of the x and y indexes and size by scr values and label it with the letter from the variable
-                    if (GUI.Button(new Rect(scr.x * x, scr.y * y, scr.x, scr.y), letter.ToString()))
+                    //Bool to check if we have already correctly guessed the letter
+                    bool alreadyGuessed = false;
+                    //Check game guesses list for current value of letter and set already guessed to true if found
+                    foreach (string str in _gameGuesses)
                     {
-                        //Bool to check if we have already correctly guessed the letter
-                        bool alreadyGuessed = false;
-                        //Check each entry in the displayed word to see if we find a match for the button we clicked and set bool to true if we do
-                        for (int i = 0; i < _displayWord.Length; i++)
+                        if (str == letter.ToString())
                         {
-                            foreach (char c in _displayWord[i])
-                            {
-                                if (c == letter)
-                                {
-                                    alreadyGuessed = true;
-                                }
-                            }
+                            alreadyGuessed = true;
                         }
-                        //If button is clicked and bool check is false, activate the OnGUIClick function and pass it the letter of the button pushed
-                        if (alreadyGuessed == false)
-                        {
-                            OnGUIClick(letter);
-                        }                                                
+                    }
+                    //If already guessed is not true we can add the button for the current letter value
+                    //Position the button based off of the x and y indexes and size by scr values and label it with the letter from the variable
+                    if (alreadyGuessed == false && GUI.Button(new Rect(scr.x * x, scr.y * y, scr.x, scr.y), letter.ToString()))
+                    {
+                        OnGUIClick(letter);
+                        _gameGuesses.Add(letter.ToString());                                                                       
                     }
                     //Increment the letter so the next button has a different letter
                     letter++;

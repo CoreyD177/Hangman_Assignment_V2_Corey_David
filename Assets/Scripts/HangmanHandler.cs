@@ -52,7 +52,7 @@ public class HangmanHandler : MonoBehaviour
         {
             _hangmanDisplay[i].SetActive(false);
         }
-        //Enable the stool object as it was disabled in previous loop
+        //Enable the stool object as it was disabled in previous loop and won't be enabled anywhere else
         _hangmanDisplay[9].SetActive(true);
         //Reset guess counters to zero for new game
         _correctGuesses = 0;
@@ -78,7 +78,7 @@ public class HangmanHandler : MonoBehaviour
     //Function to adjust the onscreen elements at start of game and every time a guess is made
     void InitializeDisplay()
     {
-        //Set the GameObject in the array that corresponds to the incorrect guess counter to active. Will enable new objects as counter increments. 
+        //Set the GameObject in the array that corresponds to the incorrect guess counter to active. Will enable new hangman visual objects as counter increments. 
         _hangmanDisplay[_incorrectGuesses].SetActive(true);
         //Create string variable to store the entries of the _displayWord array as a single string that can be assigned to the text field 
         string str = string.Join(" ", _displayWord);
@@ -103,15 +103,11 @@ public class HangmanHandler : MonoBehaviour
             //Loop through every child object in the GuessButton panel
             for (int a = 0; a < _buttonContainer.transform.childCount; a++)
             {
-                //If value of keyboard button we pressed matches the value of the current button being checked
-                if (_buttonContainer.transform.GetChild(a).GetComponentInChildren<Text>().text == e.keyCode.ToString())
+                //If value of keyboard button we pressed matches the value of the current button being checked and the button is still active
+                if (_buttonContainer.transform.GetChild(a).GetComponentInChildren<Text>().text == e.keyCode.ToString() && _buttonContainer.transform.GetChild(a).gameObject.activeInHierarchy)
                 {
-                    //If that button is still active
-                    if (_buttonContainer.transform.GetChild(a).gameObject.activeInHierarchy)
-                    {
-                        //Register players guess in PlayerGuess function
-                        PlayerGuess(e.keyCode.ToString());
-                    }
+                    //Register players guess in PlayerGuess function
+                    PlayerGuess(e.keyCode.ToString());
                     //Disable the button so it can't be guessed again
                     _buttonContainer.transform.GetChild(a).gameObject.SetActive(false);
                 }
